@@ -37,6 +37,18 @@ window.addEventListener('DOMContentLoaded', () => {
     // Set up auto-save listeners for all input fields
     setupAutoSave();
 
+    // Add event listener for form submission
+    const widgetForm = document.getElementById('widgetForm');
+    if (widgetForm) {
+        widgetForm.addEventListener('submit', loadFunction);
+    }
+
+    // Add event listener for advanced toggle button
+    const advancedToggle = document.querySelector('.advanced-toggle');
+    if (advancedToggle) {
+        advancedToggle.addEventListener('click', toggleAdvanced);
+    }
+
     // Check for URL parameters
     const urlParams = new URLSearchParams(window.location.search);
 
