@@ -873,12 +873,21 @@
         const CONFIG_PREFIX = 'rival_widget_';
 
         // Update time display
+        let clockInterval;
         function updateTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
-            document.getElementById('currentTime').textContent = timeStr;
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+                timeElement.textContent = timeStr;
+            } else {
+                // Element no longer exists (page was replaced), clear the interval
+                if (clockInterval) {
+                    clearInterval(clockInterval);
+                }
+            }
         }
-        setInterval(updateTime, 1000);
+        clockInterval = setInterval(updateTime, 1000);
         updateTime();
 
         // Load saved configuration on page load
@@ -1103,6 +1112,11 @@
 
                 // Small delay for visual feedback
                 await new Promise(resolve => setTimeout(resolve, 300));
+
+                // Clear the clock interval before replacing the page
+                if (clockInterval) {
+                    clearInterval(clockInterval);
+                }
 
                 // Replace current page with the HTML
                 document.open();
