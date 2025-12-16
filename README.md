@@ -9,11 +9,12 @@ Rival-WebWidget is a universal serverless function loader that allows you to inv
 ## Features
 
 - **Easy Function Loading**: Simple interface to load and execute serverless functions
+- **Auto-Save Settings**: All settings automatically save as you type - no need to click save
 - **Credential Management**: Securely store API keys and configuration locally
+- **Quick Launch URLs**: Use `rival://functionId/version=Draft` URLs to instantly load functions
 - **Multiple Endpoints**: Support for multiple CortexOne instances
 - **Advanced Parameters**: Customize HTTP methods and event payloads
 - **Visual Feedback**: Real-time progress indicators and status updates
-- **Persistent Configuration**: Remember your settings between sessions
 
 ## Installation
 
@@ -75,27 +76,27 @@ The extension will be available on the Chrome Web Store in the future.
 You can navigate directly to functions using the `rival://` protocol:
 
 ```
-rival://functionId
+rival://functionId/version=Draft
 ```
 
 **Examples:**
 ```
-rival://51530a93-7d27-4ca0-9feb-190fc76a46e8
-rival://my-function-id?baseUrl=https://cortexconnect.rival.io&version=Latest
+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Draft
+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Latest
+rival://my-function-id/version=v1
 ```
 
-**URL Parameters:**
-- `baseUrl` - Override the default endpoint (optional)
-- `version` - Specify function version (optional, defaults to "Draft")
-- `autoload` - Auto-load on page load (defaults to "true" for rival:// URLs)
+**URL Format:**
+- Basic: `rival://functionId` (uses default version "Draft")
+- With version: `rival://functionId/version=VersionName`
 
 **How it works:**
-1. Type or paste a `rival://functionId` URL in Chrome's address bar
+1. Type or paste a `rival://functionId/version=Draft` URL in Chrome's address bar
 2. The extension automatically intercepts the URL
-3. Opens the launcher page with your function ID pre-filled
+3. Opens the launcher page with your function ID and version pre-filled
 4. Auto-loads the function if you have saved API credentials
 
-**Note:** You must have your API key saved (via "Persist configuration") for auto-loading to work.
+**Note:** Settings are now auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
 
 ## Configuration
 

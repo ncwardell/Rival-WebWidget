@@ -19,9 +19,13 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 function handleRivalUrl(tabId, url) {
   try {
     // Parse the rival:// URL
-    // Format: rival://functionId or rival://functionId?baseUrl=xxx&version=xxx
-    const urlObj = new URL(url);
-    const functionId = urlObj.hostname || urlObj.pathname.replace(/^\/+/, '');
+    // Format: rival://functionId/version=Draft
+    // Remove the rival:// prefix
+    let urlPath = url.replace(/^rival:\/\//, '');
+
+    // Split by / to get functionId and version part
+    const parts = urlPath.split('/');
+    const functionId = parts[0];
 
     if (!functionId) {
       console.error('No function ID provided in rival:// URL');
@@ -32,19 +36,19 @@ function handleRivalUrl(tabId, url) {
     const params = new URLSearchParams();
     params.set('functionId', functionId);
 
-    // Check for additional parameters in the URL
-    if (urlObj.searchParams.has('baseUrl')) {
-      params.set('baseUrl', urlObj.searchParams.get('baseUrl'));
+    // Check for version in the path (format: /version=Draft)
+    if (parts.length > 1) {
+      const versionPart = parts[1];
+      if (versionPart.startsWith('version=')) {
+        const version = versionPart.substring(8); // Remove 'version=' prefix
+        if (version) {
+          params.set('version', version);
+        }
+      }
     }
-    if (urlObj.searchParams.has('version')) {
-      params.set('version', urlObj.searchParams.get('version'));
-    }
-    if (urlObj.searchParams.has('autoload')) {
-      params.set('autoload', urlObj.searchParams.get('autoload'));
-    } else {
-      // Auto-load by default when using rival:// URLs
-      params.set('autoload', 'true');
-    }
+
+    // Auto-load by default when using rival:// URLs
+    params.set('autoload', 'true');
 
     // Redirect to launcher page
     const launcherUrl = chrome.runtime.getURL('launcher.html') + '?' + params.toString();

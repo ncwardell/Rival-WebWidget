@@ -34,6 +34,9 @@ updateTime();
 window.addEventListener('DOMContentLoaded', () => {
     loadSavedConfig();
 
+    // Set up auto-save listeners for all input fields
+    setupAutoSave();
+
     // Check for URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('functionId')) {
@@ -73,6 +76,30 @@ function loadSavedConfig() {
     if (savedFunctionId) document.getElementById('functionId').value = savedFunctionId;
     if (savedBaseUrl) document.getElementById('baseUrl').value = savedBaseUrl;
     if (savedVersion) document.getElementById('version').value = savedVersion;
+}
+
+function setupAutoSave() {
+    // Auto-save API key on input
+    document.getElementById('apiKey').addEventListener('input', (e) => {
+        localStorage.setItem(CONFIG_PREFIX + 'api_key', e.target.value.trim());
+    });
+
+    // Auto-save function ID on input
+    document.getElementById('functionId').addEventListener('input', (e) => {
+        localStorage.setItem(CONFIG_PREFIX + 'function_id', e.target.value.trim());
+    });
+
+    // Auto-save base URL on change
+    document.getElementById('baseUrl').addEventListener('change', (e) => {
+        localStorage.setItem(CONFIG_PREFIX + 'base_url', e.target.value);
+    });
+
+    // Auto-save version on input
+    document.getElementById('version').addEventListener('input', (e) => {
+        localStorage.setItem(CONFIG_PREFIX + 'version', e.target.value);
+    });
+
+    console.log('[Rival-WebWidget] Auto-save enabled for all settings');
 }
 
 function toggleAdvanced() {
