@@ -102,8 +102,13 @@ window.addEventListener('DOMContentLoaded', () => {
         if (apiKey) {
             document.getElementById('apiKey').value = apiKey;
             setTimeout(() => {
-                document.getElementById('widgetForm').dispatchEvent(new Event('submit'));
+                const form = document.getElementById('widgetForm');
+                if (form) {
+                    form.requestSubmit();
+                }
             }, 500);
+        } else {
+            console.warn('[Rival-WebWidget] Autoload requested but no API key saved. Please enter your API key first.');
         }
     }
 });
