@@ -11,7 +11,7 @@ Rival-WebWidget is a universal serverless function loader that allows you to inv
 - **Easy Function Loading**: Simple interface to load and execute serverless functions
 - **Auto-Save Settings**: All settings automatically save as you type - no need to click save
 - **Credential Management**: Securely store API keys and configuration locally
-- **Quick Launch URLs**: Use `rival://functionId/version=Draft` URLs to instantly load functions
+- **Bookmarkable URLs**: Create chrome-extension:// URLs to instantly load functions with one click
 - **Multiple Endpoints**: Support for multiple CortexOne instances
 - **Advanced Parameters**: Customize HTTP methods and event payloads
 - **Visual Feedback**: Real-time progress indicators and status updates
@@ -71,32 +71,47 @@ The extension will be available on the Chrome Web Store in the future.
    - Click "🚀 Initialize Function"
    - The extension will load and execute your serverless function
 
-### Method 2: Using rival:// URLs (Quick Launch)
+### Method 2: Quick Launch URLs (Bookmarkable)
 
-You can navigate directly to functions using the `rival://` protocol:
+There are two ways to create quick-launch URLs:
 
+#### Option A: Chrome Extension URLs (Recommended)
+
+Create bookmarks using the chrome-extension:// URL format:
+
+```
+chrome-extension://[EXTENSION_ID]/launcher.html?functionId=YOUR_FUNCTION_ID&version=Draft&autoload=true
+```
+
+**How to set it up:**
+1. Click the extension icon and select "Setup Quick Launch URLs" at the bottom
+2. Copy the URL template provided
+3. Replace `FUNCTION_ID` and `VERSION` with your actual values
+4. Create a bookmark with this URL
+5. Click the bookmark anytime to instantly load your function!
+
+**Examples:**
+```
+chrome-extension://abcdefgh12345678/launcher.html?functionId=51530a93-7d27-4ca0-9feb-190fc76a46e8&version=Draft&autoload=true
+chrome-extension://abcdefgh12345678/launcher.html?functionId=my-func-id&version=0.0.3&autoload=true
+```
+
+#### Option B: rival:// URLs (Limited Support)
+
+**⚠️ Note:** Chrome has limited support for custom protocol handlers in extensions. The `rival://` protocol may not work reliably and will typically redirect to a Google search.
+
+If you want to try it anyway, visit the Protocol Setup page in the extension to attempt registration.
+
+**Intended format:**
 ```
 rival://functionId/version=Draft
 ```
 
-**Examples:**
-```
-rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Draft
-rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Latest
-rival://my-function-id/version=v1
-```
+**Limitation:** When you enter `rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3` in Chrome's address bar, it will likely search Google instead of opening the extension. This is a Chrome security limitation, not a bug in the extension.
 
-**URL Format:**
-- Basic: `rival://functionId` (uses default version "Draft")
-- With version: `rival://functionId/version=VersionName`
+**Recommendation:** Use the chrome-extension:// URL method (Option A) for reliable quick access.
 
-**How it works:**
-1. Type or paste a `rival://functionId/version=Draft` URL in Chrome's address bar
-2. The extension automatically intercepts the URL
-3. Opens the launcher page with your function ID and version pre-filled
-4. Auto-loads the function if you have saved API credentials
-
-**Note:** Settings are now auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
+**Note:** Settings are auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
 
 ## Configuration
 
@@ -123,19 +138,20 @@ You can modify this in the Advanced Parameters section to send custom data to yo
 
 ```
 Rival-WebWidget/
-├── manifest.json       # Chrome extension configuration
-├── background.js       # Background service worker (handles rival:// URLs)
-├── popup.html         # Extension popup interface
-├── launcher.html      # Full-page launcher (opened by rival:// URLs)
-├── styles.css         # Styling and animations
-├── script.js          # Core functionality
-├── index.html         # Standalone web version (legacy)
-├── icons/            # Extension icons
-│   ├── icon.svg      # SVG source
-│   ├── icon16.png    # 16x16 icon
-│   ├── icon48.png    # 48x48 icon
-│   └── icon128.png   # 128x128 icon
-└── README.md         # This file
+├── manifest.json          # Chrome extension configuration
+├── background.js          # Background service worker
+├── popup.html            # Extension popup interface
+├── launcher.html         # Full-page launcher
+├── protocol-setup.html   # Quick-launch URL setup guide
+├── styles.css            # Styling and animations
+├── script.js             # Core functionality
+├── index.html            # Standalone web version (legacy)
+├── icons/               # Extension icons
+│   ├── icon.svg         # SVG source
+│   ├── icon16.png       # 16x16 icon
+│   ├── icon48.png       # 48x48 icon
+│   └── icon128.png      # 128x128 icon
+└── README.md            # This file
 ```
 
 ### Building from Source

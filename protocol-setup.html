@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rival Protocol Setup</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .info-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #00ff00;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            overflow-x: auto;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .button-group button {
+            flex: 1;
+        }
+        .success {
+            color: #00ff00;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        .warning {
+            color: #ff8800;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ff8800;
+            background: rgba(255, 136, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="widget-container">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <div class="widget-header">
+            <div class="widget-logo">⚙️</div>
+            <h1>Protocol Setup <span class="version-badge">rival://</span></h1>
+            <p class="subtitle">Configure Quick Launch URLs</p>
+        </div>
+
+        <div id="status"></div>
+
+        <div class="info-section">
+            <strong>📋 Chrome Extension URL (Recommended)</strong>
+            <p style="margin: 10px 0; font-size: 11px;">This method works reliably without any setup:</p>
+            <div class="code-block" id="extensionUrl">Loading...</div>
+            <button onclick="copyExtensionUrl()">📋 Copy URL Template</button>
+            <p style="margin: 10px 0; font-size: 10px; color: #008800;">
+                Replace FUNCTION_ID and VERSION with your values. Bookmark it for quick access!
+            </p>
+        </div>
+
+        <div class="info-section">
+            <strong>⚡ rival:// Protocol (Experimental)</strong>
+            <p style="margin: 10px 0; font-size: 11px;">
+                Chrome has limited support for custom protocols in extensions. You can try registering it:
+            </p>
+            <div class="button-group">
+                <button onclick="registerProtocol()">🔧 Register rival:// Protocol</button>
+                <button onclick="testProtocol()">🧪 Test Protocol</button>
+            </div>
+            <div class="warning">
+                ⚠️ Note: Custom protocol handlers have limitations in Chrome and may not work reliably.
+                We recommend using the Chrome Extension URL method above instead.
+            </div>
+        </div>
+
+        <div class="info-section">
+            <strong>💡 Usage Examples</strong>
+            <div style="margin: 10px 0; font-size: 11px;">
+                <p><strong>Chrome Extension URL:</strong></p>
+                <div class="code-block">chrome-extension://[ID]/launcher.html?functionId=abc123&version=Draft&autoload=true</div>
+
+                <p style="margin-top: 15px;"><strong>rival:// URL (if registered):</strong></p>
+                <div class="code-block">rival://abc123/version=Draft</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>🔖 Quick Setup Tips</strong>
+            1. Copy the Chrome Extension URL above<br>
+            2. Create a bookmark with your function ID<br>
+            3. Save API key in the extension (auto-saved)<br>
+            4. Click bookmark to instantly load functions<br>
+            5. No typing needed - just one click!
+        </div>
+    </div>
+
+    <script>
+        // Get the extension ID and display the proper URL
+        const extensionId = chrome.runtime.id;
+        const baseUrl = `chrome-extension://${extensionId}/launcher.html`;
+
+        document.getElementById('extensionUrl').textContent =
+            `${baseUrl}?functionId=FUNCTION_ID&version=VERSION&autoload=true`;
+
+        function copyExtensionUrl() {
+            const url = `${baseUrl}?functionId=FUNCTION_ID&version=VERSION&autoload=true`;
+            navigator.clipboard.writeText(url).then(() => {
+                showStatus('✅ URL template copied to clipboard!', 'success');
+            }).catch(() => {
+                showStatus('❌ Failed to copy. Please copy manually.', 'warning');
+            });
+        }
+
+        function registerProtocol() {
+            try {
+                // Attempt to register the protocol handler
+                // Note: This has very limited browser support
+                const handlerUrl = `${baseUrl}?functionId=%s&autoload=true`;
+
+                if ('registerProtocolHandler' in navigator) {
+                    navigator.registerProtocolHandler(
+                        'web+rival',
+                        handlerUrl,
+                        'Rival WebWidget Function Loader'
+                    );
+                    showStatus('✅ Protocol handler registration attempted. Note: Chrome has limited support for custom protocols.', 'success');
+                } else {
+                    showStatus('❌ Protocol handler API not supported in this browser.', 'warning');
+                }
+            } catch (error) {
+                showStatus(`❌ Registration failed: ${error.message}`, 'warning');
+            }
+        }
+
+        function testProtocol() {
+            // Try to open a test rival:// URL
+            const testUrl = 'rival://test-function-id/version=Draft';
+            showStatus('🧪 Testing rival:// protocol... Check if a new tab opens.', 'success');
+
+            // This will likely fail and redirect to search, but we can try
+            window.open(testUrl, '_blank');
+
+            setTimeout(() => {
+                showStatus('ℹ️ If no tab opened, the protocol is not registered. Use the Chrome Extension URL instead.', 'warning');
+            }, 2000);
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = type;
+            statusDiv.innerHTML = message;
+            statusDiv.style.display = 'block';
+        }
+
+        // Initial message
+        showStatus('ℹ️ Chrome extensions cannot directly register rival:// URLs. Use the Chrome Extension URL method for reliable quick access.', 'warning');
+    </script>
+</body>
+</html>
