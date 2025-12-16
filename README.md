@@ -11,14 +11,23 @@ Rival-WebWidget is a universal serverless function loader that allows you to inv
 - **Easy Function Loading**: Simple interface to load and execute serverless functions
 - **Auto-Save Settings**: All settings automatically save as you type - no need to click save
 - **Credential Management**: Securely store API keys and configuration locally
-- **Quick Launch URLs**: Use `rival://functionId/version=Draft` URLs to instantly load functions
+- **Bookmarkable URLs**: Create chrome-extension:// URLs to instantly load functions with one click
 - **Multiple Endpoints**: Support for multiple CortexOne instances
 - **Advanced Parameters**: Customize HTTP methods and event payloads
 - **Visual Feedback**: Real-time progress indicators and status updates
 
 ## Installation
 
-### Method 1: Load Unpacked Extension (Development)
+Rival-WebWidget can be installed in TWO ways - as a Chrome Extension OR as a Progressive Web App (PWA). You can install both for maximum flexibility!
+
+### Method 1: Chrome Extension (Recommended for Full Features)
+
+**Advantages:**
+- Full extension capabilities
+- Works with chrome-extension:// URLs
+- Always available in toolbar
+
+**Steps:**
 
 1. **Clone or download this repository**
    ```bash
@@ -44,7 +53,32 @@ Rival-WebWidget is a universal serverless function loader that allows you to inv
    - Select the `Rival-WebWidget` directory
    - The extension icon should appear in your browser toolbar
 
-### Method 2: Install from Chrome Web Store (Coming Soon)
+### Method 2: Progressive Web App (Best for web+rival:// Protocol)
+
+**Advantages:**
+- Can register `web+rival://` protocol handler
+- Works like a native app
+- No extension permissions needed
+- Automatically updates
+
+**Steps:**
+
+1. **Host the files on a web server** (HTTPS required for PWA)
+   - Deploy to GitHub Pages, Netlify, Vercel, or any HTTPS hosting
+   - Or run locally with `python -m http.server 8000` and use a tunnel like ngrok
+
+2. **Visit the hosted URL** in Chrome
+
+3. **Install as PWA**
+   - Look for the install icon in the address bar (⊕ or computer icon)
+   - Or click the three-dot menu → "Install Rival WebWidget"
+   - The app will install and open in its own window
+
+4. **Register web+rival:// protocol**
+   - Once installed, the PWA automatically registers the `web+rival://` protocol handler
+   - You can now use URLs like `web+rival://functionId/version=Draft`
+
+### Method 3: Install from Chrome Web Store (Coming Soon)
 
 The extension will be available on the Chrome Web Store in the future.
 
@@ -71,32 +105,60 @@ The extension will be available on the Chrome Web Store in the future.
    - Click "🚀 Initialize Function"
    - The extension will load and execute your serverless function
 
-### Method 2: Using rival:// URLs (Quick Launch)
+### Method 2: Quick Launch URLs (Bookmarkable)
 
-You can navigate directly to functions using the `rival://` protocol:
+There are two ways to create quick-launch URLs:
+
+#### Option A: Chrome Extension URLs (Recommended)
+
+Create bookmarks using the chrome-extension:// URL format:
 
 ```
-rival://functionId/version=Draft
+chrome-extension://[EXTENSION_ID]/launcher.html?functionId=YOUR_FUNCTION_ID&version=Draft&autoload=true
+```
+
+**How to set it up:**
+1. Click the extension icon and select "Setup Quick Launch URLs" at the bottom
+2. Copy the URL template provided
+3. Replace `FUNCTION_ID` and `VERSION` with your actual values
+4. Create a bookmark with this URL
+5. Click the bookmark anytime to instantly load your function!
+
+**Examples:**
+```
+chrome-extension://abcdefgh12345678/launcher.html?functionId=51530a93-7d27-4ca0-9feb-190fc76a46e8&version=Draft&autoload=true
+chrome-extension://abcdefgh12345678/launcher.html?functionId=my-func-id&version=0.0.3&autoload=true
+```
+
+#### Option B: web+rival:// Protocol URLs
+
+Chrome supports custom protocol handlers with the `web+` prefix. You can register the extension to handle `web+rival://` URLs.
+
+**Setup:**
+1. Visit the Protocol Setup page in the extension (click "Setup Quick Launch URLs")
+2. Click "Register web+rival:// Protocol" and allow the permission
+3. Verify registration at chrome://settings/handlers
+
+**URL Format:**
+```
+web+rival://functionId/version=Draft
 ```
 
 **Examples:**
 ```
-rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Draft
-rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Latest
-rival://my-function-id/version=v1
+web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Draft
+web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3
 ```
 
-**URL Format:**
-- Basic: `rival://functionId` (uses default version "Draft")
-- With version: `rival://functionId/version=VersionName`
-
 **How it works:**
-1. Type or paste a `rival://functionId/version=Draft` URL in Chrome's address bar
-2. The extension automatically intercepts the URL
-3. Opens the launcher page with your function ID and version pre-filled
-4. Auto-loads the function if you have saved API credentials
+1. Register the protocol handler once (user must approve)
+2. Type `web+rival://functionId/version=Draft` in Chrome's address bar
+3. Chrome redirects to the extension launcher automatically
+4. Function loads if API key is saved
 
-**Note:** Settings are now auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
+**Note:** This requires one-time registration per browser profile. The chrome-extension:// method (Option A) works immediately without registration.
+
+**Note:** Settings are auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
 
 ## Configuration
 
@@ -123,19 +185,22 @@ You can modify this in the Advanced Parameters section to send custom data to yo
 
 ```
 Rival-WebWidget/
-├── manifest.json       # Chrome extension configuration
-├── background.js       # Background service worker (handles rival:// URLs)
-├── popup.html         # Extension popup interface
-├── launcher.html      # Full-page launcher (opened by rival:// URLs)
-├── styles.css         # Styling and animations
-├── script.js          # Core functionality
-├── index.html         # Standalone web version (legacy)
-├── icons/            # Extension icons
-│   ├── icon.svg      # SVG source
-│   ├── icon16.png    # 16x16 icon
-│   ├── icon48.png    # 48x48 icon
-│   └── icon128.png   # 128x128 icon
-└── README.md         # This file
+├── manifest.json          # Chrome extension configuration
+├── app.manifest          # PWA manifest (protocol_handlers)
+├── background.js          # Extension background service worker
+├── sw.js                 # PWA service worker
+├── popup.html            # Extension popup interface
+├── launcher.html         # Full-page launcher
+├── protocol-setup.html   # Quick-launch URL setup guide
+├── styles.css            # Styling and animations
+├── script.js             # Core functionality
+├── index.html            # Main page (works as both extension & PWA)
+├── icons/               # Extension/PWA icons
+│   ├── icon.svg         # SVG source
+│   ├── icon16.png       # 16x16 icon
+│   ├── icon48.png       # 48x48 icon
+│   └── icon128.png      # 128x128 icon
+└── README.md            # This file
 ```
 
 ### Building from Source

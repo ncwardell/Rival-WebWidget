@@ -2,26 +2,26 @@
 
 // Listen for when a tab is updated
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // Check if the URL is being updated and starts with rival://
-  if (changeInfo.url && changeInfo.url.startsWith('rival://')) {
+  // Check if the URL is being updated and starts with web+rival://
+  if (changeInfo.url && changeInfo.url.startsWith('web+rival://')) {
     handleRivalUrl(tabId, changeInfo.url);
   }
 });
 
-// Listen for web navigation events to catch rival:// URLs before they fail
+// Listen for web navigation events to catch web+rival:// URLs before they fail
 chrome.webNavigation.onBeforeNavigate.addListener((details) => {
-  if (details.url.startsWith('rival://')) {
+  if (details.url.startsWith('web+rival://')) {
     handleRivalUrl(details.tabId, details.url);
   }
 });
 
-// Handle rival:// protocol URLs
+// Handle web+rival:// protocol URLs
 function handleRivalUrl(tabId, url) {
   try {
-    // Parse the rival:// URL
-    // Format: rival://functionId/version=Draft
-    // Remove the rival:// prefix
-    let urlPath = url.replace(/^rival:\/\//, '');
+    // Parse the web+rival:// URL
+    // Format: web+rival://functionId/version=Draft
+    // Remove the web+rival:// prefix
+    let urlPath = url.replace(/^web\+rival:\/\//, '');
 
     // Split by / to get functionId and version part
     const parts = urlPath.split('/');
@@ -54,10 +54,10 @@ function handleRivalUrl(tabId, url) {
     const launcherUrl = chrome.runtime.getURL('launcher.html') + '?' + params.toString();
 
     chrome.tabs.update(tabId, { url: launcherUrl }, () => {
-      console.log(`Redirected rival:// URL to launcher: ${launcherUrl}`);
+      console.log(`Redirected web+rival:// URL to launcher: ${launcherUrl}`);
     });
   } catch (error) {
-    console.error('Error handling rival:// URL:', error);
+    console.error('Error handling web+rival:// URL:', error);
   }
 }
 
