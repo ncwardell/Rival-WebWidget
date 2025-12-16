@@ -18,7 +18,16 @@ Rival-WebWidget is a universal serverless function loader that allows you to inv
 
 ## Installation
 
-### Method 1: Load Unpacked Extension (Development)
+Rival-WebWidget can be installed in TWO ways - as a Chrome Extension OR as a Progressive Web App (PWA). You can install both for maximum flexibility!
+
+### Method 1: Chrome Extension (Recommended for Full Features)
+
+**Advantages:**
+- Full extension capabilities
+- Works with chrome-extension:// URLs
+- Always available in toolbar
+
+**Steps:**
 
 1. **Clone or download this repository**
    ```bash
@@ -44,7 +53,32 @@ Rival-WebWidget is a universal serverless function loader that allows you to inv
    - Select the `Rival-WebWidget` directory
    - The extension icon should appear in your browser toolbar
 
-### Method 2: Install from Chrome Web Store (Coming Soon)
+### Method 2: Progressive Web App (Best for web+rival:// Protocol)
+
+**Advantages:**
+- Can register `web+rival://` protocol handler
+- Works like a native app
+- No extension permissions needed
+- Automatically updates
+
+**Steps:**
+
+1. **Host the files on a web server** (HTTPS required for PWA)
+   - Deploy to GitHub Pages, Netlify, Vercel, or any HTTPS hosting
+   - Or run locally with `python -m http.server 8000` and use a tunnel like ngrok
+
+2. **Visit the hosted URL** in Chrome
+
+3. **Install as PWA**
+   - Look for the install icon in the address bar (⊕ or computer icon)
+   - Or click the three-dot menu → "Install Rival WebWidget"
+   - The app will install and open in its own window
+
+4. **Register web+rival:// protocol**
+   - Once installed, the PWA automatically registers the `web+rival://` protocol handler
+   - You can now use URLs like `web+rival://functionId/version=Draft`
+
+### Method 3: Install from Chrome Web Store (Coming Soon)
 
 The extension will be available on the Chrome Web Store in the future.
 
@@ -152,14 +186,16 @@ You can modify this in the Advanced Parameters section to send custom data to yo
 ```
 Rival-WebWidget/
 ├── manifest.json          # Chrome extension configuration
-├── background.js          # Background service worker
+├── app.manifest          # PWA manifest (protocol_handlers)
+├── background.js          # Extension background service worker
+├── sw.js                 # PWA service worker
 ├── popup.html            # Extension popup interface
 ├── launcher.html         # Full-page launcher
 ├── protocol-setup.html   # Quick-launch URL setup guide
 ├── styles.css            # Styling and animations
 ├── script.js             # Core functionality
-├── index.html            # Standalone web version (legacy)
-├── icons/               # Extension icons
+├── index.html            # Main page (works as both extension & PWA)
+├── icons/               # Extension/PWA icons
 │   ├── icon.svg         # SVG source
 │   ├── icon16.png       # 16x16 icon
 │   ├── icon48.png       # 48x48 icon
