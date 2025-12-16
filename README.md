@@ -49,6 +49,8 @@ The extension will be available on the Chrome Web Store in the future.
 
 ## Usage
 
+### Method 1: Using the Extension Popup
+
 1. **Open the extension**
    - Click the Rival-WebWidget icon in your Chrome toolbar
 
@@ -67,6 +69,33 @@ The extension will be available on the Chrome Web Store in the future.
    - Check "Persist configuration" to remember your settings
    - Click "🚀 Initialize Function"
    - The extension will load and execute your serverless function
+
+### Method 2: Using rival:// URLs (Quick Launch)
+
+You can navigate directly to functions using the `rival://` protocol:
+
+```
+rival://functionId
+```
+
+**Examples:**
+```
+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8
+rival://my-function-id?baseUrl=https://cortexconnect.rival.io&version=Latest
+```
+
+**URL Parameters:**
+- `baseUrl` - Override the default endpoint (optional)
+- `version` - Specify function version (optional, defaults to "Draft")
+- `autoload` - Auto-load on page load (defaults to "true" for rival:// URLs)
+
+**How it works:**
+1. Type or paste a `rival://functionId` URL in Chrome's address bar
+2. The extension automatically intercepts the URL
+3. Opens the launcher page with your function ID pre-filled
+4. Auto-loads the function if you have saved API credentials
+
+**Note:** You must have your API key saved (via "Persist configuration") for auto-loading to work.
 
 ## Configuration
 
@@ -94,7 +123,9 @@ You can modify this in the Advanced Parameters section to send custom data to yo
 ```
 Rival-WebWidget/
 ├── manifest.json       # Chrome extension configuration
+├── background.js       # Background service worker (handles rival:// URLs)
 ├── popup.html         # Extension popup interface
+├── launcher.html      # Full-page launcher (opened by rival:// URLs)
 ├── styles.css         # Styling and animations
 ├── script.js          # Core functionality
 ├── index.html         # Standalone web version (legacy)

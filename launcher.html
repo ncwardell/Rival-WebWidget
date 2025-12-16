@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rival-WebWidget • Function Loader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="widget-container">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <div class="widget-header">
+            <div class="widget-logo">⚡</div>
+            <h1>Rival-WebWidget <span class="version-badge">v1.0</span></h1>
+            <p class="subtitle">Universal Serverless Function Loader</p>
+
+            <div class="status-line">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>System Online</span>
+                </div>
+                <span id="currentTime"></span>
+            </div>
+        </div>
+
+        <form id="widgetForm" onsubmit="loadFunction(event)">
+            <div class="input-group">
+                <label for="apiKey">🔑 API Key</label>
+                <input type="password" id="apiKey" required placeholder="Enter your CortexOne API key">
+                <div class="hint">Credentials stored locally</div>
+            </div>
+
+            <div class="input-group">
+                <label for="functionId">🆔 Function ID</label>
+                <input type="text" id="functionId" required placeholder="e.g., 51530a93-7d27-4ca0-9feb-190fc76a46e8">
+                <div class="hint">Target function UUID</div>
+            </div>
+
+            <div class="input-group">
+                <label for="baseUrl">🌐 Base URL</label>
+                <select id="baseUrl" required>
+                    <option value="https://cortexconnect.rival.io">https://cortexconnect.rival.io</option>
+                    <option value="http://34.171.49.45:4443">http://34.171.49.45:4443</option>
+                </select>
+                <div class="hint">CortexOne instance endpoint</div>
+            </div>
+
+            <div class="input-group">
+                <label for="version">📦 Version</label>
+                <input type="text" id="version" value="Draft" required placeholder="e.g., Draft, Latest, v1">
+                <div class="hint">Function version identifier</div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberConfig" checked>
+                <label for="rememberConfig">Persist configuration</label>
+            </div>
+
+            <button class="advanced-toggle" type="button" onclick="toggleAdvanced()">⚙️ Advanced Parameters</button>
+
+            <div class="advanced-section" id="advancedSection">
+                <div class="input-group">
+                    <label for="eventData">📄 Event Payload (JSON)</label>
+                    <textarea id="eventData" class="json-editor" placeholder='{"web": true}'>{"web": true}</textarea>
+                    <div class="hint">Custom event data for function</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="httpMethod">🔧 HTTP Method</label>
+                    <select id="httpMethod">
+                        <option value="POST">POST</option>
+                        <option value="GET">GET</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">🚀 Initialize Function</button>
+
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">Initializing...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="info-box">
+            <strong>⚡ System Protocol</strong>
+            1. Enter API credentials<br>
+            2. Specify target function<br>
+            3. Initialize load sequence<br>
+            4. Function assumes control<br>
+            5. Full navigation enabled<br><br>
+            <strong>💡 Pro Tip:</strong><br>
+            Use <code>rival://functionId</code> URLs to quick-launch functions
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

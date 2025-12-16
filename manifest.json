@@ -4,13 +4,19 @@
   "version": "1.0.0",
   "description": "Universal Serverless Function Loader for CortexOne",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs",
+    "webNavigation"
   ],
   "host_permissions": [
     "https://cortexconnect.rival.io/*",
     "http://34.171.49.45:4443/*",
-    "https://rival-internal.secretcult.network/*"
+    "https://rival-internal.secretcult.network/*",
+    "<all_urls>"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
