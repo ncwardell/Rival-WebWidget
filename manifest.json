@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Rival WebWidget",
+  "version": "1.0.0",
+  "description": "Universal Serverless Function Loader for CortexOne",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://cortexconnect.rival.io/*",
+    "http://34.171.49.45:4443/*",
+    "https://rival-internal.secretcult.network/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
