@@ -64,7 +64,7 @@
             <strong>📋 Chrome Extension URL (Recommended)</strong>
             <p style="margin: 10px 0; font-size: 11px;">This method works reliably without any setup:</p>
             <div class="code-block" id="extensionUrl">Loading...</div>
-            <button onclick="copyExtensionUrl()">📋 Copy URL Template</button>
+            <button data-action="copy">📋 Copy URL Template</button>
             <p style="margin: 10px 0; font-size: 10px; color: #008800;">
                 Replace FUNCTION_ID and VERSION with your values. Bookmark it for quick access!
             </p>
@@ -76,8 +76,8 @@
                 Register a custom protocol handler to use web+rival:// URLs in your browser.
             </p>
             <div class="button-group">
-                <button onclick="registerProtocol()">🔧 Register web+rival:// Protocol</button>
-                <button onclick="testProtocol()">🧪 Test Protocol</button>
+                <button data-action="register">🔧 Register web+rival:// Protocol</button>
+                <button data-action="test">🧪 Test Protocol</button>
             </div>
             <div class="warning" id="protocolStatus">
                 ⚠️ Click "Register" above and allow the permission prompt to enable web+rival:// URLs.
@@ -107,68 +107,6 @@
         </div>
     </div>
 
-    <script>
-        // Get the extension ID and display the proper URL
-        const extensionId = chrome.runtime.id;
-        const baseUrl = `chrome-extension://${extensionId}/launcher.html`;
-
-        document.getElementById('extensionUrl').textContent =
-            `${baseUrl}?functionId=FUNCTION_ID&version=VERSION&autoload=true`;
-
-        function copyExtensionUrl() {
-            const url = `${baseUrl}?functionId=FUNCTION_ID&version=VERSION&autoload=true`;
-            navigator.clipboard.writeText(url).then(() => {
-                showStatus('✅ URL template copied to clipboard!', 'success');
-            }).catch(() => {
-                showStatus('❌ Failed to copy. Please copy manually.', 'warning');
-            });
-        }
-
-        function registerProtocol() {
-            try {
-                // Register the web+rival protocol handler
-                // Chrome requires the 'web+' prefix for custom protocols
-                const handlerUrl = `${baseUrl}?url=%s`;
-
-                if ('registerProtocolHandler' in navigator) {
-                    navigator.registerProtocolHandler(
-                        'web+rival',
-                        handlerUrl,
-                        'Rival WebWidget'
-                    );
-                    showStatus('✅ Protocol handler registered! You can now use web+rival:// URLs. Check chrome://settings/handlers to verify.', 'success');
-                    document.getElementById('protocolStatus').className = 'success';
-                    document.getElementById('protocolStatus').textContent = '✅ Protocol registered! Try the test button or use web+rival://functionId/version=Draft in your address bar.';
-                } else {
-                    showStatus('❌ Protocol handler API not supported in this browser.', 'warning');
-                }
-            } catch (error) {
-                showStatus(`❌ Registration failed: ${error.message}`, 'warning');
-            }
-        }
-
-        function testProtocol() {
-            // Try to open a test web+rival:// URL
-            const testUrl = 'web+rival://test-function-id/version=Draft';
-            showStatus('🧪 Opening test URL: web+rival://test-function-id/version=Draft', 'success');
-
-            // Open the test URL - if registered, it will redirect to our launcher
-            window.location.href = testUrl;
-
-            setTimeout(() => {
-                showStatus('ℹ️ If the launcher did not open, click "Register" first and allow the permission.', 'warning');
-            }, 2000);
-        }
-
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.className = type;
-            statusDiv.innerHTML = message;
-            statusDiv.style.display = 'block';
-        }
-
-        // Initial message
-        showStatus('ℹ️ Use web+rival:// protocol after registration, or use Chrome Extension URLs for reliable quick access.', 'success');
-    </script>
+    <script src="protocol-setup.js"></script>
 </body>
 </html>
