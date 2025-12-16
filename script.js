@@ -39,6 +39,36 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Check for URL parameters
     const urlParams = new URLSearchParams(window.location.search);
+
+    // Check if this was opened via protocol handler (url parameter contains web+rival://)
+    if (urlParams.has('url')) {
+        const protocolUrl = urlParams.get('url');
+        if (protocolUrl.startsWith('web+rival://')) {
+            // Parse web+rival://functionId/version=Draft format
+            let urlPath = protocolUrl.replace(/^web\+rival:\/\//, '');
+            const parts = urlPath.split('/');
+            const functionId = parts[0];
+
+            if (functionId) {
+                document.getElementById('functionId').value = functionId;
+            }
+
+            // Check for version in the path
+            if (parts.length > 1) {
+                const versionPart = parts[1];
+                if (versionPart.startsWith('version=')) {
+                    const version = versionPart.substring(8);
+                    if (version) {
+                        document.getElementById('version').value = version;
+                    }
+                }
+            }
+
+            // Don't auto-submit, let it be set by autoload parameter below
+        }
+    }
+
+    // Standard URL parameters
     if (urlParams.has('functionId')) {
         document.getElementById('functionId').value = urlParams.get('functionId');
     }

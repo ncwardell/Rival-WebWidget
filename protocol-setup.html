@@ -71,17 +71,17 @@
         </div>
 
         <div class="info-section">
-            <strong>⚡ rival:// Protocol (Experimental)</strong>
+            <strong>⚡ web+rival:// Protocol</strong>
             <p style="margin: 10px 0; font-size: 11px;">
-                Chrome has limited support for custom protocols in extensions. You can try registering it:
+                Register a custom protocol handler to use web+rival:// URLs in your browser.
             </p>
             <div class="button-group">
-                <button onclick="registerProtocol()">🔧 Register rival:// Protocol</button>
+                <button onclick="registerProtocol()">🔧 Register web+rival:// Protocol</button>
                 <button onclick="testProtocol()">🧪 Test Protocol</button>
             </div>
-            <div class="warning">
-                ⚠️ Note: Custom protocol handlers have limitations in Chrome and may not work reliably.
-                We recommend using the Chrome Extension URL method above instead.
+            <div class="warning" id="protocolStatus">
+                ⚠️ Click "Register" above and allow the permission prompt to enable web+rival:// URLs.
+                Check chrome://settings/handlers to verify registration.
             </div>
         </div>
 
@@ -91,8 +91,9 @@
                 <p><strong>Chrome Extension URL:</strong></p>
                 <div class="code-block">chrome-extension://[ID]/launcher.html?functionId=abc123&version=Draft&autoload=true</div>
 
-                <p style="margin-top: 15px;"><strong>rival:// URL (if registered):</strong></p>
-                <div class="code-block">rival://abc123/version=Draft</div>
+                <p style="margin-top: 15px;"><strong>web+rival:// URL (after registration):</strong></p>
+                <div class="code-block">web+rival://abc123/version=Draft</div>
+                <div class="code-block">web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3</div>
             </div>
         </div>
 
@@ -125,17 +126,19 @@
 
         function registerProtocol() {
             try {
-                // Attempt to register the protocol handler
-                // Note: This has very limited browser support
-                const handlerUrl = `${baseUrl}?functionId=%s&autoload=true`;
+                // Register the web+rival protocol handler
+                // Chrome requires the 'web+' prefix for custom protocols
+                const handlerUrl = `${baseUrl}?url=%s`;
 
                 if ('registerProtocolHandler' in navigator) {
                     navigator.registerProtocolHandler(
                         'web+rival',
                         handlerUrl,
-                        'Rival WebWidget Function Loader'
+                        'Rival WebWidget'
                     );
-                    showStatus('✅ Protocol handler registration attempted. Note: Chrome has limited support for custom protocols.', 'success');
+                    showStatus('✅ Protocol handler registered! You can now use web+rival:// URLs. Check chrome://settings/handlers to verify.', 'success');
+                    document.getElementById('protocolStatus').className = 'success';
+                    document.getElementById('protocolStatus').textContent = '✅ Protocol registered! Try the test button or use web+rival://functionId/version=Draft in your address bar.';
                 } else {
                     showStatus('❌ Protocol handler API not supported in this browser.', 'warning');
                 }
@@ -145,15 +148,15 @@
         }
 
         function testProtocol() {
-            // Try to open a test rival:// URL
-            const testUrl = 'rival://test-function-id/version=Draft';
-            showStatus('🧪 Testing rival:// protocol... Check if a new tab opens.', 'success');
+            // Try to open a test web+rival:// URL
+            const testUrl = 'web+rival://test-function-id/version=Draft';
+            showStatus('🧪 Opening test URL: web+rival://test-function-id/version=Draft', 'success');
 
-            // This will likely fail and redirect to search, but we can try
-            window.open(testUrl, '_blank');
+            // Open the test URL - if registered, it will redirect to our launcher
+            window.location.href = testUrl;
 
             setTimeout(() => {
-                showStatus('ℹ️ If no tab opened, the protocol is not registered. Use the Chrome Extension URL instead.', 'warning');
+                showStatus('ℹ️ If the launcher did not open, click "Register" first and allow the permission.', 'warning');
             }, 2000);
         }
 
@@ -165,7 +168,7 @@
         }
 
         // Initial message
-        showStatus('ℹ️ Chrome extensions cannot directly register rival:// URLs. Use the Chrome Extension URL method for reliable quick access.', 'warning');
+        showStatus('ℹ️ Use web+rival:// protocol after registration, or use Chrome Extension URLs for reliable quick access.', 'success');
     </script>
 </body>
 </html>

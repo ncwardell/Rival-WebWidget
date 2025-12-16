@@ -96,20 +96,33 @@ chrome-extension://abcdefgh12345678/launcher.html?functionId=51530a93-7d27-4ca0-
 chrome-extension://abcdefgh12345678/launcher.html?functionId=my-func-id&version=0.0.3&autoload=true
 ```
 
-#### Option B: rival:// URLs (Limited Support)
+#### Option B: web+rival:// Protocol URLs
 
-**⚠️ Note:** Chrome has limited support for custom protocol handlers in extensions. The `rival://` protocol may not work reliably and will typically redirect to a Google search.
+Chrome supports custom protocol handlers with the `web+` prefix. You can register the extension to handle `web+rival://` URLs.
 
-If you want to try it anyway, visit the Protocol Setup page in the extension to attempt registration.
+**Setup:**
+1. Visit the Protocol Setup page in the extension (click "Setup Quick Launch URLs")
+2. Click "Register web+rival:// Protocol" and allow the permission
+3. Verify registration at chrome://settings/handlers
 
-**Intended format:**
+**URL Format:**
 ```
-rival://functionId/version=Draft
+web+rival://functionId/version=Draft
 ```
 
-**Limitation:** When you enter `rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3` in Chrome's address bar, it will likely search Google instead of opening the extension. This is a Chrome security limitation, not a bug in the extension.
+**Examples:**
+```
+web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Draft
+web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3
+```
 
-**Recommendation:** Use the chrome-extension:// URL method (Option A) for reliable quick access.
+**How it works:**
+1. Register the protocol handler once (user must approve)
+2. Type `web+rival://functionId/version=Draft` in Chrome's address bar
+3. Chrome redirects to the extension launcher automatically
+4. Function loads if API key is saved
+
+**Note:** This requires one-time registration per browser profile. The chrome-extension:// method (Option A) works immediately without registration.
 
 **Note:** Settings are auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
 
