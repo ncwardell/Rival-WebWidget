@@ -76,7 +76,19 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Don't auto-submit, let it be set by autoload parameter below
+            // Auto-submit when web+rival:// URL is detected
+            const apiKey = localStorage.getItem(CONFIG_PREFIX + 'api_key');
+            if (apiKey) {
+                document.getElementById('apiKey').value = apiKey;
+                setTimeout(() => {
+                    const form = document.getElementById('widgetForm');
+                    if (form) {
+                        form.requestSubmit();
+                    }
+                }, 500);
+            } else {
+                console.warn('[Rival-WebWidget] web+rival:// URL detected but no API key saved. Please enter your API key first.');
+            }
         }
     }
 
