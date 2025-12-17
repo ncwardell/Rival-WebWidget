@@ -1,274 +1,493 @@
-# Rival-WebWidget
+# Rival WebWidget Extension
 
-A Chrome extension for loading and executing serverless web functions from CortexOne.
+A MetaMask-like Chrome extension for seamless serverless function execution. Turn your browser into a secure gateway for CortexOne serverless functions with wallet-style transaction management.
 
-## Overview
+---
 
-Rival-WebWidget is a universal serverless function loader that allows you to invoke and interact with CortexOne functions directly from your browser. The extension provides a sleek, cyberpunk-themed interface for managing API credentials, selecting functions, and controlling execution parameters.
+## 🎯 Overview
 
-## Features
+Rival WebWidget is a browser extension that acts as a secure wallet and execution environment for CortexOne serverless functions. Like MetaMask manages crypto transactions, Rival WebWidget manages serverless function invocations with secure credential storage, transaction logging, and one-click protocol handling.
 
-- **Easy Function Loading**: Simple interface to load and execute serverless functions
-- **Auto-Save Settings**: All settings automatically save as you type - no need to click save
-- **Credential Management**: Securely store API keys and configuration locally
-- **Bookmarkable URLs**: Create chrome-extension:// URLs to instantly load functions with one click
-- **Multiple Endpoints**: Support for multiple CortexOne instances
-- **Advanced Parameters**: Customize HTTP methods and event payloads
-- **Visual Feedback**: Real-time progress indicators and status updates
+---
 
-## Installation
+## ✨ Current Features
 
-Rival-WebWidget can be installed in TWO ways - as a Chrome Extension OR as a Progressive Web App (PWA). You can install both for maximum flexibility!
+### 🔐 Secure Credential Management
+- **Auto-save API Keys**: Credentials are automatically saved to browser local storage
+- **Encrypted Storage**: API keys stored locally, never transmitted except to authorized endpoints
+- **Persistent Configuration**: Settings persist across browser sessions
 
-### Method 1: Chrome Extension (Recommended for Full Features)
+### 🚀 Protocol Handler (`web+rival://`)
+- **One-Click Function Loading**: Click `web+rival://` links to instantly execute functions
+- **Auto-Submit**: Functions execute automatically when API key is saved
+- **URL Format**: `web+rival://functionId/version=0.0.3`
+- **PWA Support**: Works as both Chrome extension and Progressive Web App
 
-**Advantages:**
-- Full extension capabilities
-- Works with chrome-extension:// URLs
-- Always available in toolbar
+### 🎨 Current Interface
+- Function ID input
+- Version selector (Draft, Latest, custom versions)
+- Base URL configuration
+- Advanced parameters (Event payload, HTTP method)
+- Real-time loading indicators
 
-**Steps:**
+---
 
-1. **Clone or download this repository**
-   ```bash
-   git clone https://github.com/yourusername/Rival-WebWidget.git
-   cd Rival-WebWidget
-   ```
+## 🚧 Roadmap: MetaMask-Like Experience
 
-2. **Create icon files** (required)
-   - Navigate to the `icons` directory
-   - Follow the instructions in `icons/README.md` to create the required PNG files
-   - Or use ImageMagick:
-     ```bash
-     cd icons
-     convert icon.svg -resize 16x16 icon16.png
-     convert icon.svg -resize 48x48 icon48.png
-     convert icon.svg -resize 128x128 icon128.png
-     ```
+### 🎨 Rival Branding & Design
+**Status**: Planned
 
-3. **Load the extension in Chrome**
-   - Open Chrome and navigate to `chrome://extensions/`
-   - Enable "Developer mode" (toggle in the top-right corner)
-   - Click "Load unpacked"
-   - Select the `Rival-WebWidget` directory
-   - The extension icon should appear in your browser toolbar
+- **Brand Alignment**: Design system matching [cortexone.rival.io](https://cortexone.rival.io/)
+- **Rival Logo**: Prominent logo placement at extension header
+- **Color Scheme**: Rival's signature colors and typography
+- **Modern UI**: Clean, professional interface inspired by MetaMask
 
-### Method 2: Progressive Web App (Best for web+rival:// Protocol)
+### 💰 Wallet Interface
+**Status**: Planned
 
-**Advantages:**
-- Can register `web+rival://` protocol handler
-- Works like a native app
-- No extension permissions needed
-- Automatically updates
-
-**Steps:**
-
-1. **Host the files on a web server** (HTTPS required for PWA)
-   - Deploy to GitHub Pages, Netlify, Vercel, or any HTTPS hosting
-   - Or run locally with `python -m http.server 8000` and use a tunnel like ngrok
-
-2. **Visit the hosted URL** in Chrome
-
-3. **Install as PWA**
-   - Look for the install icon in the address bar (⊕ or computer icon)
-   - Or click the three-dot menu → "Install Rival WebWidget"
-   - The app will install and open in its own window
-
-4. **Register web+rival:// protocol**
-   - Once installed, the PWA automatically registers the `web+rival://` protocol handler
-   - You can now use URLs like `web+rival://functionId/version=Draft`
-
-### Method 3: Install from Chrome Web Store (Coming Soon)
-
-The extension will be available on the Chrome Web Store in the future.
-
-## Usage
-
-### Method 1: Using the Extension Popup
-
-1. **Open the extension**
-   - Click the Rival-WebWidget icon in your Chrome toolbar
-
-2. **Enter your credentials**
-   - API Key: Your CortexOne API key
-   - Function ID: The UUID of the function you want to invoke
-   - Base URL: Select your CortexOne instance endpoint
-   - Version: Specify the function version (e.g., "Draft", "Latest", "v1")
-
-3. **Configure advanced options (optional)**
-   - Click "Advanced Parameters" to expand
-   - Customize the event payload (JSON)
-   - Select the HTTP method (POST, GET, PUT, DELETE)
-
-4. **Initialize the function**
-   - Check "Persist configuration" to remember your settings
-   - Click "🚀 Initialize Function"
-   - The extension will load and execute your serverless function
-
-### Method 2: Quick Launch URLs (Bookmarkable)
-
-There are two ways to create quick-launch URLs:
-
-#### Option A: Chrome Extension URLs (Recommended)
-
-Create bookmarks using the chrome-extension:// URL format:
-
+Display USD balance at the top of the extension (wallet functionality):
 ```
-chrome-extension://[EXTENSION_ID]/launcher.html?functionId=YOUR_FUNCTION_ID&version=Draft&autoload=true
+┌─────────────────────────┐
+│   [Rival Logo]          │
+│                         │
+│   Balance: $100.00 USD  │
+│                         │
+└─────────────────────────┘
 ```
 
-**How to set it up:**
-1. Click the extension icon and select "Setup Quick Launch URLs" at the bottom
-2. Copy the URL template provided
-3. Replace `FUNCTION_ID` and `VERSION` with your actual values
-4. Create a bookmark with this URL
-5. Click the bookmark anytime to instantly load your function!
+Initially fixed at $100, expandable for future pay-per-invocation features.
 
-**Examples:**
+### 📑 Two-Tab Interface
+**Status**: Planned
+
+#### Tab 1: Settings
+Simplified configuration (removing unnecessary fields):
+- **API Key** (required)
+- **Base URL** (required)
+  - Default: `https://cortexconnect.rival.io`
+  - Alternative: `http://34.171.49.45:4443`
+
+*Removed fields*: Function ID, Version, Event Data, HTTP Method (these are now protocol-driven)
+
+#### Tab 2: Transaction Log
+Track all function invocations with MetaMask-like transaction history:
 ```
-chrome-extension://abcdefgh12345678/launcher.html?functionId=51530a93-7d27-4ca0-9feb-190fc76a46e8&version=Draft&autoload=true
-chrome-extension://abcdefgh12345678/launcher.html?functionId=my-func-id&version=0.0.3&autoload=true
-```
-
-#### Option B: web+rival:// Protocol URLs
-
-Chrome supports custom protocol handlers with the `web+` prefix. You can register the extension to handle `web+rival://` URLs.
-
-**Setup:**
-1. Visit the Protocol Setup page in the extension (click "Setup Quick Launch URLs")
-2. Click "Register web+rival:// Protocol" and allow the permission
-3. Verify registration at chrome://settings/handlers
-
-**URL Format:**
-```
-web+rival://functionId/version=Draft
-```
-
-**Examples:**
-```
-web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=Draft
-web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3
+┌─────────────────────────────────────────┐
+│ Recent Transactions                     │
+├─────────────────────────────────────────┤
+│ ✅ getUserData  12:45 PM  Status: 200  │
+│ ✅ processOrder 12:30 PM  Status: 200  │
+│ ❌ fetchData    12:15 PM  Status: 500  │
+│ ✅ authenticate 12:00 PM  Status: 200  │
+└─────────────────────────────────────────┘
 ```
 
-**How it works:**
-1. Register the protocol handler once (user must approve)
-2. Type `web+rival://functionId/version=Draft` in Chrome's address bar
-3. Chrome redirects to the extension launcher automatically
-4. Function loads if API key is saved
+Each entry shows:
+- Function name/ID
+- Timestamp
+- HTTP status code
+- Success/failure indicator
 
-**Note:** This requires one-time registration per browser profile. The chrome-extension:// method (Option A) works immediately without registration.
+### 🔗 Enhanced Protocol Handler
+**Status**: Partially Implemented
 
-**Note:** Settings are auto-saved as you type. Your API key will be saved automatically when you paste or enter it.
+#### New URL Format
+```
+web+rival://{functionId}?v={versionId}
+web+rival://{functionId}?v={versionId}/{path}
+```
 
-## Configuration
+**Examples**:
+- `web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8?v=0.0.3`
+- `web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8?v=Draft`
+- `web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8?v=Latest/dashboard`
+- `web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8?v=0.0.3/user/profile`
 
-### Supported Endpoints
+#### Event Payload Mapping
 
-- `https://cortexconnect.rival.io` - Production endpoint
-- `http://34.171.49.45:4443` - Alternative endpoint (auto-translated to HTTPS)
-
-### Event Payload
-
-The extension allows you to customize the event data sent to your function. Default payload:
-
+**Base invocation** (no path):
 ```json
 {
   "web": true
 }
 ```
 
-You can modify this in the Advanced Parameters section to send custom data to your function.
-
-## Development
-
-### Project Structure
-
-```
-Rival-WebWidget/
-├── manifest.json          # Chrome extension configuration
-├── app.manifest          # PWA manifest (protocol_handlers)
-├── background.js          # Extension background service worker
-├── sw.js                 # PWA service worker
-├── popup.html            # Extension popup interface
-├── launcher.html         # Full-page launcher
-├── protocol-setup.html   # Quick-launch URL setup guide
-├── styles.css            # Styling and animations
-├── script.js             # Core functionality
-├── index.html            # Main page (works as both extension & PWA)
-├── icons/               # Extension/PWA icons
-│   ├── icon.svg         # SVG source
-│   ├── icon16.png       # 16x16 icon
-│   ├── icon48.png       # 48x48 icon
-│   └── icon128.png      # 128x128 icon
-└── README.md            # This file
+**With path** (e.g., `/dashboard`):
+```json
+{
+  "web": true,
+  "path": "dashboard"
+}
 ```
 
-### Building from Source
+**With nested path** (e.g., `/user/profile`):
+```json
+{
+  "web": true,
+  "path": "user/profile"
+}
+```
 
-1. Make your changes to the source files
-2. Ensure icons are generated (see Installation step 2)
-3. Reload the extension in `chrome://extensions/`
+#### First-Run Handler Registration
+**Status**: Planned
 
-### Testing
+On extension install or first run:
+1. Show dialog: "Rival WebWidget wants to handle web+rival:// URLs"
+2. User clicks "Allow"
+3. Protocol handler registered automatically
+4. No manual navigation to setup page required
 
-1. Load the extension using the unpacked method
-2. Test with a valid CortexOne API key and function ID
-3. Check the browser console for debugging information
+### ✅ Transaction Confirmation Dialog
+**Status**: Planned (Critical Feature)
 
-## API Integration
+Before EVERY function invocation, show MetaMask-style confirmation:
 
-The extension exposes a global `RivalWidget` object that loaded functions can use:
+```
+┌─────────────────────────────────────────┐
+│  Confirm Function Execution             │
+├─────────────────────────────────────────┤
+│                                         │
+│  Function:  getUserData                 │
+│  Version:   0.0.3                       │
+│  Path:      /dashboard                  │
+│  Endpoint:  cortexconnect.rival.io      │
+│                                         │
+│  Event Data:                            │
+│  {                                      │
+│    "web": true,                         │
+│    "path": "dashboard"                  │
+│  }                                      │
+│                                         │
+│  [Reject]              [Confirm]        │
+└─────────────────────────────────────────┘
+```
 
+**Workflow**:
+1. User clicks `web+rival://` link OR website triggers execution
+2. Extension pauses and shows confirmation dialog
+3. User reviews function details
+4. User clicks **Reject** (abort) or **Confirm** (execute)
+5. On confirm, function executes and result displays
+6. Transaction logged to Transaction Log tab
+
+### 🌐 Website-Triggered Invocations
+**Status**: Planned (Advanced Feature)
+
+Allow websites to trigger the extension to execute functions:
+
+#### JavaScript API
 ```javascript
-// Get stored credentials
-const apiKey = window.RivalWidget.getApiKey();
-const functionId = window.RivalWidget.getFunctionId();
-const baseUrl = window.RivalWidget.getBaseUrl();
-
-// Get the full function URL
-const url = window.RivalWidget.getFunctionUrl();
-
-// Invoke a function programmatically
-const response = await window.RivalWidget.invokeFunction({
-  custom: "data"
-});
-
-// Reload the widget
-window.RivalWidget.reload();
+// Website can request function execution via extension
+if (window.rivalWebWidget) {
+  await window.rivalWebWidget.execute({
+    functionId: '51530a93-7d27-4ca0-9feb-190fc76a46e8',
+    version: '0.0.3',
+    path: 'dashboard',
+    eventData: {
+      userId: '12345',
+      action: 'getData'
+    }
+  });
+}
 ```
 
-## Security
+#### Security Flow
+1. Website calls `rivalWebWidget.execute()`
+2. Extension shows confirmation dialog (same as protocol handler)
+3. User reviews request details
+4. User approves/rejects
+5. Extension executes function using stored API key
+6. Result returned to website
+7. Transaction logged
 
-- API credentials are stored locally using `localStorage`
-- Credentials are never sent to third parties
-- All communication is encrypted (HTTPS)
-- Mixed content warnings are automatically handled
+**Benefits**:
+- Websites don't need to store API keys
+- Users maintain full control via confirmation dialogs
+- Centralized credential management
+- Audit trail in transaction log
 
-## Troubleshooting
+---
 
-### Extension won't load
-- Ensure all required icon files are present in the `icons/` directory
-- Check that `manifest.json` is valid JSON
-- Verify Developer mode is enabled in Chrome
+## 🔧 Installation
 
-### Function invocation fails
-- Verify your API key is correct
-- Check that the Function ID is valid
-- Ensure the base URL is accessible
-- Check browser console for detailed error messages
+### Chrome Extension
+1. Clone this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" (top right)
+4. Click "Load unpacked"
+5. Select the extension directory
+6. Extension icon appears in toolbar
 
-### Mixed content warnings
-- The extension automatically translates HTTP endpoints to HTTPS where possible
-- If using a custom endpoint, ensure it supports HTTPS
+### First-Time Setup
+1. Click extension icon
+2. On first run, accept protocol handler registration (future feature)
+3. Enter your CortexOne API key (Settings tab)
+4. Select Base URL
+5. Ready to use!
 
-## Contributing
+---
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
+## 📖 Usage
 
-## License
+### Method 1: Protocol URLs (Recommended)
+Click or paste `web+rival://` URLs anywhere:
 
-This project is licensed under the MIT License.
+```
+web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8?v=0.0.3
+```
 
-## Support
+Extension automatically:
+1. Shows confirmation dialog (future)
+2. Loads your saved API key
+3. Executes the function
+4. Displays HTML output
+5. Logs transaction (future)
 
-For questions or support, please open an issue on GitHub.
+### Method 2: Extension Popup
+1. Click extension icon
+2. Enter your credentials (API Key, Function ID, Version)
+3. Click "Initialize Function"
+4. View function output
+
+### Method 3: Website Integration (Future)
+Websites can trigger functions via JavaScript API with user confirmation.
+
+---
+
+## 🔐 Security Model
+
+### Credential Storage
+- **Local Only**: API keys stored in browser's `localStorage`
+- **Never Transmitted**: Credentials only sent to configured base URL
+- **User Controlled**: Only executes on user confirmation (future)
+
+### Transaction Approval (Future)
+Like MetaMask signing transactions:
+- Every invocation requires explicit user approval
+- Clear display of what function will execute
+- View event data before confirming
+- Reject suspicious or unwanted invocations
+
+### Host Permissions
+Extension only accesses:
+- `https://cortexconnect.rival.io`
+- `http://34.171.49.45:4443`
+- No other domains without explicit permission
+
+---
+
+## 🛠️ Technical Architecture
+
+### Current Implementation
+
+#### Files
+- **manifest.json**: Chrome extension configuration (Manifest V3)
+- **popup.html**: Extension popup interface
+- **launcher.html**: Full-page function loader
+- **script.js**: Core functionality and protocol handling
+- **styles.css**: Extension styling
+- **background.js**: Service worker for protocol interception
+- **protocol-setup.html**: Protocol handler registration page
+- **protocol-setup.js**: Registration logic
+
+#### Protocol Flow
+```
+User clicks web+rival://...
+         ↓
+Browser catches protocol
+         ↓
+Extension background.js intercepts
+         ↓
+Redirects to launcher.html with params
+         ↓
+script.js parses URL
+         ↓
+Auto-fills form fields
+         ↓
+Auto-submits if API key saved
+         ↓
+Function executes
+         ↓
+HTML output displayed
+```
+
+### Future Implementation
+
+#### Enhanced Protocol Flow (with Confirmation)
+```
+User clicks web+rival://...
+         ↓
+Browser catches protocol
+         ↓
+Extension shows confirmation dialog
+         ↓
+User reviews details
+         ↓
+User clicks Confirm
+         ↓
+Function executes with saved credentials
+         ↓
+Result displayed
+         ↓
+Transaction logged
+```
+
+#### Website Integration Flow
+```
+Website calls rivalWebWidget.execute()
+         ↓
+Extension receives request
+         ↓
+Shows confirmation dialog
+         ↓
+User approves
+         ↓
+Extension executes with API key
+         ↓
+Result returned to website
+         ↓
+Transaction logged
+```
+
+---
+
+## 📋 URL Format Specification
+
+### Current Format (Legacy)
+```
+web+rival://functionId/version=versionId
+```
+
+**Example**:
+```
+web+rival://51530a93-7d27-4ca0-9feb-190fc76a46e8/version=0.0.3
+```
+
+### New Format (Roadmap)
+```
+web+rival://{functionId}?v={versionId}[/{path}]
+```
+
+**Components**:
+- `{functionId}`: UUID of the serverless function
+- `?v={versionId}`: Version identifier (e.g., `0.0.3`, `Draft`, `Latest`)
+- `/{path}`: Optional path for routing within function (e.g., `/dashboard`, `/user/profile`)
+
+**Examples**:
+
+| URL | Parsed Values | Event Payload |
+|-----|---------------|---------------|
+| `web+rival://abc123?v=0.0.3` | `functionId=abc123`<br>`version=0.0.3` | `{"web": true}` |
+| `web+rival://abc123?v=Draft/dashboard` | `functionId=abc123`<br>`version=Draft`<br>`path=dashboard` | `{"web": true, "path": "dashboard"}` |
+| `web+rival://abc123?v=Latest/user/profile` | `functionId=abc123`<br>`version=Latest`<br>`path=user/profile` | `{"web": true, "path": "user/profile"}` |
+
+---
+
+## 🎯 Use Cases
+
+### 1. Quick Function Testing
+Developer testing serverless functions:
+```
+web+rival://myFunction?v=Draft
+```
+- Click link
+- Confirm execution (future)
+- See output immediately
+- Check transaction log for debugging (future)
+
+### 2. Shareable Function Links
+Share function access with team:
+```
+web+rival://reports?v=Latest/monthly
+```
+- Recipients click link
+- Enter their own API key (first time)
+- Confirm execution (future)
+- View report output
+
+### 3. Embedded in Documentation
+Link functions directly in docs:
+```markdown
+View the dashboard: [Launch](web+rival://dashboard?v=Latest)
+```
+
+### 4. Website Integration (Future)
+E-commerce site processing orders:
+```javascript
+await window.rivalWebWidget.execute({
+  functionId: 'processOrder',
+  version: 'Latest',
+  eventData: { orderId: '12345', userId: 'abc' }
+});
+```
+- User confirms transaction
+- Function processes securely
+- Result returned to website
+- Logged for audit
+
+---
+
+## 🔮 Future Enhancements
+
+### Near-Term
+- ✅ Confirmation dialogs for all invocations
+- ✅ Two-tab interface (Settings + Transaction Log)
+- ✅ Rival branding and design overhaul
+- ✅ First-run protocol handler auto-registration
+- ✅ New URL format with path support (`?v=` and optional `/path`)
+- ✅ Simplified settings (only API Key and Base URL)
+
+### Mid-Term
+- 💡 Website JavaScript API for triggering invocations
+- 💡 Transaction log export (CSV, JSON)
+- 💡 Function execution analytics
+- 💡 Multiple API key profiles (work, personal, test)
+- 💡 Dark mode
+
+### Long-Term
+- 💡 Actual wallet functionality with billing integration
+- 💡 Pay-per-invocation metering
+- 💡 Team/organization API key sharing
+- 💡 Function bookmarks/favorites
+- 💡 Execution history search and filtering
+- 💡 Chrome OS native app integration (clean `rival://` URLs without `web+` prefix)
+
+---
+
+## 🆘 Support
+
+### Common Issues
+
+**Q: Protocol handler not working?**
+A: Reload extension at `chrome://extensions/` and check protocol registration in `protocol-setup.html`
+
+**Q: API key not saving?**
+A: Check browser console for localStorage errors. Ensure you're not in incognito mode.
+
+**Q: Function not auto-executing?**
+A: Ensure API key is saved first. Open extension popup, enter API key, then try protocol URL again.
+
+**Q: Confirmation dialog not showing?**
+A: Feature not yet implemented. Currently functions auto-execute when API key is saved.
+
+### Developer Console
+Check browser console (F12) for debug logs:
+```
+[Rival-WebWidget] web+rival:// URL detected
+[Rival-WebWidget] API key loaded from storage
+[Rival-WebWidget] Auto-submitting form...
+```
+
+---
+
+## 📞 Contact
+
+- **Product**: Rival CortexOne Team
+- **Website**: https://cortexone.rival.io/
+- **Documentation**: [CortexOne Docs](https://cortexconnect.rival.io)
+
+---
+
+**Version**: 1.0.0 (Current Implementation)
+**Roadmap Version**: 2.0.0 (MetaMask-like Experience)
+**Last Updated**: December 2025
